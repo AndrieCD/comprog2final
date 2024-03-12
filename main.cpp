@@ -85,9 +85,6 @@ void searchRecord();
 void deleteRecord();
 void displayRecords();
 
-
-void validateMenuChoice(int *input);
-
 int main(){
 	
 	int menuChoice = 0;
@@ -129,20 +126,4 @@ int main(){
 
 void addNewRecord(){
 	cout << "Adding new record..." << endl;
-}
-
-void validateMenuChoice(int *input){
-	
-	do {
- 	   while (!(cin >> *input)) {
-  	      cout << "Error! Invalid input, try again: ";
-  	      cin.clear();
-   	     cin.ignore(123, '\n');
-  	  }
-
- 	   if (*input > 6 || *input < 1) {
-  	      cout << "Error! Input out of range, try again." << endl;
-  	  }
-	} while (*input > 6 || *input < 1);
-
 }
