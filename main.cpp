@@ -62,20 +62,11 @@ Avoid using \n or new line control character, instead use endl for visibility.
 
 using namespace std;
 
-void programMenu();
 void addNewRecord();
 void validateMenuChoice(int *input);
 
 int main(){
 	
-	programMenu();
-	
-	cout << "Members..." << endl;
-	
-    return 0;
-}
-
-void programMenu(){
 	int menuChoice = 0;
     
    	cout << "---------------------------------------------------------------------------" << endl;
@@ -106,11 +97,15 @@ void programMenu(){
     	case 6:
     		break;
 	}
+	
+	cout << "Members..." << endl;
+	
+    return 0;
 }
+
 
 void addNewRecord(){
 	cout << "Adding new record..." << endl;
-	programMenu();
 }
 
 void validateMenuChoice(int *input){
