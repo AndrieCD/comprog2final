@@ -15,6 +15,28 @@ b. Search record
 c. Delete record
 d. Display records
 
+The program must store the following:
+a. Student ID Number
+b. Full Name
+c. Birthday
+d. Address
+e. Gender
+f. Degree Program
+g. Year Level
+
+----SAMPLE----
+Welcome to Group Pr0gr@mm@z Student Information System
+What do you want to do?
+1. Add New Record
+2. Search Record
+3. Display All Records
+4. Display Specific Record
+5. Delete Record
+6. Exit
+Please type your selection: __
+
+
+
 
 
 ---FORMAT---
