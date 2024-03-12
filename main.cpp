@@ -1,5 +1,22 @@
 
 /*
+REQUIREMENTS
+   The program must use the following programming concepts:
+a. Functions
+b. Arrays
+c. Structures
+d. Pointers and/or Linked List
+e. File Manipulation
+
+   The program must have a Main Menu wherein the user can select the operation
+he wants. Operations must be:
+a. Add new record
+b. Search record
+c. Delete record
+d. Display records
+
+
+
 ---FORMAT---
 
 Code blocks should have the open curly braces in the same line as the control line, for example:
@@ -62,7 +79,13 @@ Avoid using \n or new line control character, instead use endl for visibility.
 
 using namespace std;
 
+//core functions
 void addNewRecord();
+void searchRecord();
+void deleteRecord();
+void displayRecords();
+
+
 void validateMenuChoice(int *input);
 
 int main(){
