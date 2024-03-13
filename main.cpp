@@ -36,7 +36,10 @@ What do you want to do?
 Please type your selection: __
 
 
-
+----additional functions---
+-save data to file on exit
+-load data from file on start
+-(sorting for all records display???)
 
 
 ---FORMAT---
