@@ -111,7 +111,7 @@ void deleteRecord();
 void displayRecords();
 
 int main(){
-	
+	do{
 	int menuChoice = 0;
     
    	cout << "---------------------------------------------------------------------------" << endl;
@@ -127,9 +127,7 @@ int main(){
    	cout << "6. Exit" << endl << endl;
     	
    	cout << "Please type your selection: ";
-   	validateMenuChoice(&menuChoice);
-    	
-    cout << menuChoice << endl;
+   	cin >> menuChoice;
     	
     switch(menuChoice){
     	case 1:
@@ -142,7 +140,7 @@ int main(){
     	case 6:
     		break;
 	}
-	
+	}while(true);
 	cout << "Members..." << endl;
 	
     return 0;
