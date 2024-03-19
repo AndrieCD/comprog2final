@@ -88,12 +88,15 @@ Utilize spaces for readability and visibility as much as possible, for exampe:
                     ^ space     ^ space
 -------------------------//////////-------------------------
 
-Avoid using \n or new line control character, instead use endl for visibility.
+Avoid using \n or new line control character, instead use endl for visibility and consistency.
 
 	cout << "Hello World" << endl;
 	cout << "Two new lines!" << endl << endl;
 	
 -------------------------//////////-------------------------
+
+// SAVE TO FILE EVERY RECORD ADDED (???)
+// LOAD FROM FILE ON PROGRAM START
 
 */
 
