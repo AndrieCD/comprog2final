@@ -192,7 +192,41 @@ void addNewRecord(const Student& student, Node*& head, Node*& tmp){ // ADD NEW R
 };
 void searchRecord();
 void deleteRecord();
-void displayRecords();
+void displayRecords(Node*& head){
+	
+	 Node* newNode = head;
+	 
+	if (newNode == NULL){
+		cout << "=====================================================" << endl
+			 << "                 DISPLAY RECORDS" << endl
+			 << "=====================================================" << endl << endl;
+		
+		cout << "NO RECORDS AVAILABLE..." << endl << endl;
+	 }
+	 int i = 1;
+	 while(newNode != NULL){
+	 	cout << "=====================================================" << endl
+			 << "                 DISPLAY RECORDS" << endl
+			 << "=====================================================" << endl << endl;
+		
+	 	cout << "Student " << i << ": " << endl;
+	 	cout << "ID: " << newNode->student.idNumber << endl;
+		cout << "Full Name: " << newNode->student.fullName << endl;
+		cout << "Birthday: " << newNode->student.birthday << endl;
+		cout << "Address: " << newNode->student.address << endl;
+		cout << "Gender: " << newNode->student.gender << endl;
+		cout << "Degree Program: " << newNode->student.degreeProgram << endl;
+		cout << "Year Level: " << newNode->student.yearLevel << endl << endl;
+		
+		cout << "----------------------------------" << endl << endl;
+		
+		i++;
+		
+		newNode = newNode->next;
+	 }
+	
+	
+};
 
 void mainMenu(int &menuChoice){
 	do{
@@ -231,7 +265,10 @@ int main(){
     		addNewRecord(studentData, head, tmp);
     		break;
     	case 2:
+    		
     	case 3:
+    		displayRecords(head);
+    		break;
     	case 4:
     	case 5:
     	case 6:
