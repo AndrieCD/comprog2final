@@ -108,6 +108,7 @@ Avoid using \n or new line control character, instead use endl for visibility an
 
 using namespace std;
 
+// STUDENT CLASS + MEMBERS AND METHODS
 class Student {
 	public:
 			string idNumber;
@@ -151,17 +152,21 @@ class Student {
 		
 };
 
+//NODE STRUCTURE
 struct Node {
 	Student student;
 	Node* next;
 };
 
+//FUNCTION FOR PAUSE AND CLEAR
 void pauseClear(){
 	system("pause");
 	system("cls");
 }
 
 //core functions
+
+//ADDS A NEW RECORD
 void addNewRecord(const Student& student, Node*& head, Node*& tmp){ // ADD NEW RECORD
 	ofstream outFile ("student_records.txt", ios::app); //creates the file
 	
@@ -228,7 +233,53 @@ void searchRecord(Node* head, string match){
 	pauseClear();
 }
 
-void deleteRecord();
+void deleteRecord(Node*& head, string match){
+	Node* current = head;
+	Node* prev = NULL;
+	
+	if (current == NULL){
+		cout << "=====================================================" << endl
+			 << "                Delete Record" << endl
+			 << "=====================================================" << endl << endl;
+		
+		cout << "NO RECORDS AVAILABLE..." << endl << endl;
+		system("pause");
+		return;
+	}
+	
+	cout << "=====================================================" << endl
+			 << "                Delete Record" << endl
+			 << "=====================================================" << endl << endl;
+		while (current != NULL){
+			if (current->student.idNumber == match){
+					prev->next = current->next;
+					delete current;
+			}
+			prev = current;
+			current = current->next;
+			
+		}
+		
+		ofstream outFile("student_records.txt");
+		
+		current = head;
+		
+		while (current != NULL){
+			outFile << current->student.idNumber << endl
+					<< current->student.fullName << endl
+					<< current->student.birthday << endl
+					<< current->student.address << endl
+					<< current->student.gender << endl
+					<< current->student.degreeProgram << endl
+					<< current->student.yearLevel << endl << endl;
+			
+			current = current->next;
+	}
+	outFile.close();
+	cout << "Records Updated" << endl;
+	
+	pauseClear();
+}
 
 void displayRecords(Node*& head){
 	
@@ -251,13 +302,13 @@ void displayRecords(Node*& head){
 	 int i = 1;
 	 while(current != NULL){
 	 	cout << "Student " << i << ": " << endl;
-	 	cout << "ID: " << newNode->student.idNumber << endl;
-		cout << "Full Name: " << newNode->student.fullName << endl;
-		cout << "Birthday: " << newNode->student.birthday << endl;
-		cout << "Address: " << newNode->student.address << endl;
-		cout << "Gender: " << newNode->student.gender << endl;
-		cout << "Degree Program: " << newNode->student.degreeProgram << endl;
-		cout << "Year Level: " << newNode->student.yearLevel << endl << endl;
+	 	cout << "ID: " << current->student.idNumber << endl;
+		cout << "Full Name: " << current->student.fullName << endl;
+		cout << "Birthday: " << current->student.birthday << endl;
+		cout << "Address: " << current->student.address << endl;
+		cout << "Gender: " << current->student.gender << endl;
+		cout << "Degree Program: " << current->student.degreeProgram << endl;
+		cout << "Year Level: " << current->student.yearLevel << endl << endl;
 		
 		cout << "----------------------------------" << endl;
 		
@@ -269,8 +320,67 @@ void displayRecords(Node*& head){
 	pauseClear();
 };
 
-void displaySpecific(){
+void displaySpecific(Node*& head){
+	Node* current = head;
+	string gender;
+	string program;
+	int yearlvl;
+	int i = 1;
+	 
+	if (current == NULL){
+		cout << "=====================================================" << endl
+			 << "                 DISPLAY RECORDS" << endl
+			 << "=====================================================" << endl << endl;
+		
+		cout << "NO RECORDS AVAILABLE..." << endl << endl;
+		
+		system("pause");
+		return;
+	 }
+ 	cout << "=====================================================" << endl
+			 << "                 DISPLAY RECORDS" << endl
+			 << "=====================================================" << endl << endl;
 	
+	int option; 
+	cout << "Display Specific Records By: " << endl
+		 << "1. Gender" << endl
+		 << "2. Degree Program" << endl
+		 << "3. Year Level" << endl;
+		 
+	cin >> option;
+	
+	switch(option){
+		case 1:
+			cout << "Type the Gender of Students to View: ";
+			cin >> gender;
+			
+			i = 1;
+			while(current != NULL){
+				if (current->student.gender == gender){
+				 	cout << "Student " << i << ": " << endl;
+				 	cout << "ID: " << current->student.idNumber << endl;
+					cout << "Full Name: " << current->student.fullName << endl;
+					cout << "Birthday: " << current->student.birthday << endl;
+					cout << "Address: " << current->student.address << endl;
+					cout << "Gender: " << current->student.gender << endl;
+					cout << "Degree Program: " << current->student.degreeProgram << endl;
+					cout << "Year Level: " << current->student.yearLevel << endl << endl;
+					
+					cout << "----------------------------------" << endl;
+					i++;
+				}
+				current = current->next;
+			 }
+			 
+			break;
+		case 2:
+			
+			break;
+		case 3:
+			break;
+	}
+	
+	pauseClear();
 }
 
 void loadFromFile(Node*& head, Node*& tmp){
@@ -338,8 +448,10 @@ void mainMenu(int &menuChoice){
 
 		}while(menuChoice > 6 || menuChoice < 1);   // Repeat the loop until a valid input is acquired.
    		
+   		if (menuChoice == 6)
+   			break;
    		
-	}while(menuChoice < 1 || menuChoice > 5);
+	}while(menuChoice < 1 || menuChoice > 6);
 
 	system("cls");
 }
@@ -373,6 +485,8 @@ int main(){
     		displayRecords(head);
     		break;
     	case 4:
+    		displaySpecific(head);
+    		break;
     	case 5:
     	case 6:
     		break;
