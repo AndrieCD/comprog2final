@@ -209,7 +209,7 @@ void deleteRecord(Node*& head, string match){
 			 << "                Delete Record" << endl
 			 << "=====================================================" << endl << endl;
 		while (current != NULL){
-			if (current->student.fullName == match){
+			if (current->student.idNumber == match){
 					prev->next = current->next;
 					delete current;
 			}
@@ -294,6 +294,40 @@ void mainMenu(int &menuChoice){
 	}while(menuChoice < 0 || menuChoice > 6);
 }
 
+void loadFromFile(Node*& head, Node*& tmp){
+	ifstream inFile("student_records.txt");
+	
+	if (!inFile.is_open()) {
+        cout << "Error: Unable to open file for reading. Restart the program." << endl;
+        return;
+    }
+    
+    string idNumber, fullName, birthday, address, gender, degreeProgram;
+    int yearLevel;
+	
+	while(inFile >> idNumber >> fullName >> birthday >> address >> gender >> degreeProgram >> yearLevel){
+		
+		Node* newNode = new Node; 		// CREATE A NEW NODE
+		newNode->student.idNumber = idNumber;
+		newNode->student.fullName = fullName;
+		newNode->student.birthday = birthday;
+		newNode->student.address = address;
+		newNode->student.gender = gender;
+		newNode->student.degreeProgram = degreeProgram;
+		newNode->student.yearLevel = yearLevel;
+		
+		if (head == NULL){					// IF HEAD IS NULL OR THERE'S NO NODES YET IN THE LIST THEN...
+			newNode->next = head;			// link to headd
+			head = newNode;					// make head point to newNode
+			tmp = head;						// make tmp point to newNode
+		} else {
+			tmp->next = newNode;			// connect prev node or the node tmp is pointing to toward the new one
+			tmp = tmp->next;				// make tmp point to "previous" node's next link
+			tmp->next = NULL;				// make the new node's next link NULL temporarily
+		}
+	}
+	inFile.close();
+}
 
 int main(){
 	int menuChoice;
@@ -301,7 +335,7 @@ int main(){
 	Node* head = NULL;
 	Node* tmp = NULL;
 	string match;
-	
+	loadFromFile(head, tmp);
 	do{
 		
     mainMenu(menuChoice);
@@ -319,7 +353,7 @@ int main(){
     		break;
     	case 4:  
     	case 5:
-    		cout << "Enter the Name of the Student: ";
+    		cout << "Enter the ID Number of the Student: ";
     		cin >> match;
     		deleteRecord(head, match);
     		break;
