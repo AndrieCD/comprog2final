@@ -1,5 +1,8 @@
 
 /*
+FIX INPUT VALIDATION AND INPUT STREAM ERRORS
+
+
 REQUIREMENTS
    The program must use the following programming concepts:
 a. Functions
