@@ -103,7 +103,9 @@ Avoid using \n or new line control character, instead use endl for visibility an
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <cstring>
 #include <cstdlib>
+#include <cctype>
 
 
 using namespace std;
@@ -111,26 +113,48 @@ using namespace std;
 // STUDENT CLASS + MEMBERS AND METHODS
 class Student {
 	public:
-			string idNumber;
-			string fullName;
+			char idNumber[9];
+			char fullName[30];
 			string birthday;
 			string address;
 			string gender;
 			string degreeProgram;
-			int yearLevel;
+			string yearLevel;
 			
 	void getData(){
+			
 		cout << "Enter Student ID Number: ";
-		cin >> idNumber;
-	
+		for(int i = 0; i < 9; i++){
+			cin >> idNumber[i];
+		}
+		cin.clear();
+		cin.ignore(123, '\n');
 		cout << "Enter Student's Full Name: ";
-		cin >> fullName;
-	
-		cout << "Enter Student's Birthday: ";
-		cin >> birthday;
+		bool valid;
+		do{
+			
+			cin.getline(fullName, 50);
+			
+			valid = true;
+			for(int i = 0; i < strlen(fullName) && valid; i++){
+				if (!(isalpha(fullName[i]) || isspace(fullName[i]))){
+				cout << "MALI BOBO";
+				valid = false;
+				cin.clear();
+				}else{
+					valid = true;
+				}
+			}
+		}while (!valid);
+		string month, day, year;
+		cout << "Enter Student's Birthday:(Month, Day, Year) ";
+		cin >> month >> day >> year;
+		birthday = month + " " + day + " " + year;
+		cin.clear();
+		cin.ignore(123, '\n');
 	
 		cout << "Enter Student's Address: ";
-		cin >> address;
+		getline (cin, address);
 	
 		cout << "Enter Student's Gender: ";
 		cin >> gender;
@@ -138,7 +162,7 @@ class Student {
 		cout << "Enter Student's Degree Program: ";
 		cin >> degreeProgram;
 	
-		cout << "Enter Student's Year Level: ";
+		cout << "Enter Student's Year Level:(1st, 2nd, 3rd, or 4th) ";
 		cin >> yearLevel;	
 	}
 
@@ -302,9 +326,17 @@ void displayRecords(Node*& head){
 	 int i = 1;
 	 while(current != NULL){
 	 	cout << "Student " << i << ": " << endl;
-	 	cout << "ID: " << current->student.idNumber << endl;
-		cout << "Full Name: " << current->student.fullName << endl;
-		cout << "Birthday: " << current->student.birthday << endl;
+	 	cout << "ID: ";
+	 	for (int j = 0; j<9; j++){
+	 		cout << current->student.idNumber[j];
+		 }
+		 
+		cout << endl << "Full Name: ";
+		for (int j = 0; j < strlen(current->student.fullName); j++){
+	 		cout << current->student.fullName[j];
+		 }
+		 
+		cout << endl << "Birthday: " << current->student.birthday << endl;
 		cout << "Address: " << current->student.address << endl;
 		cout << "Gender: " << current->student.gender << endl;
 		cout << "Degree Program: " << current->student.degreeProgram << endl;
@@ -324,7 +356,7 @@ void displaySpecific(Node*& head){
 	Node* current = head;
 	string gender;
 	string program;
-	int yearlvl;
+	string yearlvl;
 	int i = 1;
 	 
 	if (current == NULL){
@@ -358,8 +390,11 @@ void displaySpecific(Node*& head){
 			while(current != NULL){
 				if (current->student.gender == gender){
 				 	cout << "Student " << i << ": " << endl;
-				 	cout << "ID: " << current->student.idNumber << endl;
-					cout << "Full Name: " << current->student.fullName << endl;
+				 	cout << "ID: ";
+		 			for (int j = 0; j<9; j++){
+	 					cout << current->student.idNumber[j];	
+			 		}
+					cout << endl << "Full Name: " << current->student.fullName << endl;
 					cout << "Birthday: " << current->student.birthday << endl;
 					cout << "Address: " << current->student.address << endl;
 					cout << "Gender: " << current->student.gender << endl;
@@ -431,14 +466,17 @@ void loadFromFile(Node*& head, Node*& tmp){
         return;
     }
     
-    string idNumber, fullName, birthday, address, gender, degreeProgram;
-    int yearLevel;
+    string idNumber, fullName, birthday, address, gender, degreeProgram, yearLevel;
 	
 	while(inFile >> idNumber >> fullName >> birthday >> address >> gender >> degreeProgram >> yearLevel){
 		
 		Node* newNode = new Node; 		// CREATE A NEW NODE
-		newNode->student.idNumber = idNumber;
-		newNode->student.fullName = fullName;
+		for(int i = 0; i < 9; i++){
+			newNode->student.idNumber[i] = idNumber[i];
+		}
+		for(int i = 0; i < fullName.size();i++){
+			newNode->student.fullName[i] = fullName[i];
+		}
 		newNode->student.birthday = birthday;
 		newNode->student.address = address;
 		newNode->student.gender = gender;
@@ -528,6 +566,10 @@ int main(){
     		displaySpecific(head);
     		break;
     	case 5:
+    		cout << "Enter the ID Number of the Student: ";
+    		cin >> match;
+    		deleteRecord(head, match);
+    		break;
     	case 6:
     		break;
 	}
