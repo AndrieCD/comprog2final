@@ -191,12 +191,59 @@ void addNewRecord(const Student& student, Node*& head, Node*& tmp){ // ADD NEW R
 	
 };
 void searchRecord();
-void deleteRecord();
+void deleteRecord(Node*& head, string match){
+	Node* current = head;
+	Node* prev = NULL;
+	
+	if (current == NULL){
+		cout << "=====================================================" << endl
+			 << "                Delete Record" << endl
+			 << "=====================================================" << endl << endl;
+		
+		cout << "NO RECORDS AVAILABLE..." << endl << endl;
+		system("pause");
+		return;
+	}
+	
+	cout << "=====================================================" << endl
+			 << "                Delete Record" << endl
+			 << "=====================================================" << endl << endl;
+		while (current != NULL){
+			if (current->student.fullName == match){
+					prev->next = current->next;
+					delete current;
+			}
+			prev = current;
+			current = current->next;
+			
+		}
+		
+		ofstream outFile("student_records.txt");
+		
+		current = head;
+		
+		while (current != NULL){
+			outFile << current->student.idNumber << endl
+					<< current->student.fullName << endl
+					<< current->student.birthday << endl
+					<< current->student.address << endl
+					<< current->student.gender << endl
+					<< current->student.degreeProgram << endl
+					<< current->student.yearLevel << endl << endl;
+			
+			current = current->next;
+	}
+	outFile.close();
+	cout << "Records Updated" << endl;
+	
+	system("pause");
+	system("cls");
+};
 void displayRecords(Node*& head){
 	
-	 Node* newNode = head;
+	 Node* current = head;
 	 
-	if (newNode == NULL){
+	if (current == NULL){
 		cout << "=====================================================" << endl
 			 << "                 DISPLAY RECORDS" << endl
 			 << "=====================================================" << endl << endl;
@@ -204,25 +251,25 @@ void displayRecords(Node*& head){
 		cout << "NO RECORDS AVAILABLE..." << endl << endl;
 	 }
 	 int i = 1;
-	 while(newNode != NULL){
+	 while(current != NULL){
 	 	cout << "=====================================================" << endl
 			 << "                 DISPLAY RECORDS" << endl
 			 << "=====================================================" << endl << endl;
 		
 	 	cout << "Student " << i << ": " << endl;
-	 	cout << "ID: " << newNode->student.idNumber << endl;
-		cout << "Full Name: " << newNode->student.fullName << endl;
-		cout << "Birthday: " << newNode->student.birthday << endl;
-		cout << "Address: " << newNode->student.address << endl;
-		cout << "Gender: " << newNode->student.gender << endl;
-		cout << "Degree Program: " << newNode->student.degreeProgram << endl;
-		cout << "Year Level: " << newNode->student.yearLevel << endl << endl;
+	 	cout << "ID: " << current->student.idNumber << endl;
+		cout << "Full Name: " << current->student.fullName << endl;
+		cout << "Birthday: " << current->student.birthday << endl;
+		cout << "Address: " << current->student.address << endl;
+		cout << "Gender: " << current->student.gender << endl;
+		cout << "Degree Program: " << current->student.degreeProgram << endl;
+		cout << "Year Level: " << current->student.yearLevel << endl << endl;
 		
 		cout << "----------------------------------" << endl << endl;
 		
 		i++;
 		
-		newNode = newNode->next;
+		current = current->next;
 	 }
 	
 	
@@ -253,6 +300,7 @@ int main(){
 	Student studentData;
 	Node* head = NULL;
 	Node* tmp = NULL;
+	string match;
 	
 	do{
 		
@@ -269,8 +317,12 @@ int main(){
     	case 3:
     		displayRecords(head);
     		break;
-    	case 4:
+    	case 4:  
     	case 5:
+    		cout << "Enter the Name of the Student: ";
+    		cin >> match;
+    		deleteRecord(head, match);
+    		break;
     	case 6:
     		break;
 	}
