@@ -104,8 +104,33 @@ Avoid using \n or new line control character, instead use endl for visibility an
 
 #include <iostream>
 
+#include "Node.h"
+#include "Student.h"
 
 using namespace std;
+
+class Student {
+	public:
+		Student();
+		virtual ~Student();
+		void getData();
+		void display();
+		
+	private:
+		string idNumber;
+		string fullName;
+		string birthday;
+		string address;
+		string gender;
+		string degreeProgram;
+		int yearLevel;
+};
+
+struct Node {
+	Student student;
+	Node* next;
+};
+
 
 //core functions
 void addNewRecord();
@@ -113,27 +138,38 @@ void searchRecord();
 void deleteRecord();
 void displayRecords();
 
-int main(){
+void mainMenu(int &menuChoice){
 	do{
-	int menuChoice = 0;
+		cout << "---------------------------------------------------------------------------" << endl
+			 << "           Welcome to <GROUP NAME HERE> STUDENT INFORMATION SYSTEM         " << endl
+			 << "---------------------------------------------------------------------------" << endl << endl
+		 
+			 << "What do you want to do?" << endl
+		 	<< "1. Add New Record" << endl
+		 	<< "2. Search Record" << endl
+		 	<< "3. Display All Records" << endl
+		 	<< "4. Display Specific Record" << endl
+		 	<< "5. Delete Record" << endl
+		 	<< "6. Exit" << endl << endl;
+    	
+   		cout << "Please type your selection: ";
+   		cin >> menuChoice;
+	}while(menuChoice < 0 || menuChoice > 6);
+}
+
+
+int main(){
+	int menuChoice;
+	Student studentData;
+	
+	do{
+	    	
+    mainMenu(menuChoice);
     
-   	cout << "---------------------------------------------------------------------------" << endl;
-   	cout << "\t\t\t Welcome to <GROUP NAME HERE> STUDENT INFORMATION SYSTEM" << endl;
-   	cout << "---------------------------------------------------------------------------" << endl << endl;
-    	
-   	cout << "What do you want to do?" << endl;
-   	cout << "1. Add New Record" << endl;
-   	cout << "2. Search Record" << endl;
-   	cout << "3. Display All Records" << endl;
-   	cout << "4. Display Specific Record" << endl;
-   	cout << "5. Delete Record" << endl;
-   	cout << "6. Exit" << endl << endl;
-    	
-   	cout << "Please type your selection: ";
-   	cin >> menuChoice;
-    	
     switch(menuChoice){
     	case 1:
+    		studentData.getData();
+    		studentData.display();
     		addNewRecord();
     		break;
     	case 2:
