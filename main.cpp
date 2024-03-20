@@ -104,26 +104,48 @@ Avoid using \n or new line control character, instead use endl for visibility an
 
 #include <iostream>
 
-#include "Node.h"
-#include "Student.h"
-
 using namespace std;
 
 class Student {
 	public:
-		Student();
-		virtual ~Student();
-		void getData();
-		void display();
 		
-	private:
-		string idNumber;
-		string fullName;
-		string birthday;
-		string address;
-		string gender;
-		string degreeProgram;
-		int yearLevel;
+	void getData(){
+		cout << "Enter Student ID Number: ";
+		cin >> idNumber;
+	
+		cout << "Enter Student's Full Name: ";
+		cin >> fullName;
+	
+		cout << "Enter Student's Birthday: ";
+		cin >> birthday;
+	
+		cout << "Enter Student's Address: ";
+		cin >> address;
+	
+		cout << "Enter Student's Gender: ";
+		cin >> gender;
+	
+		cout << "Enter Student's Degree Program: ";
+		cin >> degreeProgram;
+	
+		cout << "Enter Student's Year Level: ";
+		cin >> yearLevel;	
+	}
+
+	void display(){
+		cout << idNumber << endl
+			 << birthday << endl
+			 << degreeProgram;
+	}
+		
+		private:
+			string idNumber;
+			string fullName;
+			string birthday;
+			string address;
+			string gender;
+			string degreeProgram;
+			int yearLevel;
 };
 
 struct Node {
