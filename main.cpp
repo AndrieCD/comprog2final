@@ -100,15 +100,24 @@ Avoid using \n or new line control character, instead use endl for visibility an
 
 */
 
-
-
 #include <iostream>
+#include <string>
+#include <fstream>
+#include <cstdlib>
+
 
 using namespace std;
 
 class Student {
 	public:
-		
+			string idNumber;
+			string fullName;
+			string birthday;
+			string address;
+			string gender;
+			string degreeProgram;
+			int yearLevel;
+			
 	void getData(){
 		cout << "Enter Student ID Number: ";
 		cin >> idNumber;
@@ -139,13 +148,7 @@ class Student {
 	}
 		
 		private:
-			string idNumber;
-			string fullName;
-			string birthday;
-			string address;
-			string gender;
-			string degreeProgram;
-			int yearLevel;
+		
 };
 
 struct Node {
@@ -153,12 +156,157 @@ struct Node {
 	Node* next;
 };
 
+void pauseClear(){
+	system("pause");
+	system("cls");
+}
 
 //core functions
-void addNewRecord();
-void searchRecord();
+void addNewRecord(const Student& student, Node*& head, Node*& tmp){ // ADD NEW RECORD
+	ofstream outFile ("student_records.txt", ios::app); //creates the file
+	
+	if (head == NULL){
+		Node* newNode = new Node;
+		newNode->student = student;
+		newNode->next = head;
+		head = newNode;
+		tmp = head;
+		
+	}else {
+		Node* newNode = new Node;
+		newNode->student = student;
+		tmp->next = newNode;
+		tmp = tmp->next;
+		tmp->next = NULL;
+	}
+	
+	outFile << student.idNumber << endl
+			<< student.fullName << endl
+			<< student.birthday << endl
+			<< student.address << endl
+			<< student.gender << endl
+			<< student.degreeProgram << endl
+			<< student.yearLevel << endl << endl;
+			
+	outFile.close();
+	
+	pauseClear();
+};
+
+//this function searches then matches and displays the records, that the user has inputed
+void searchRecord(Node* head, string match){
+	Node* current = head;
+	if (current== NULL){ // it displays a message "No Records Available" if the list is empty
+
+	cout << "---------------------------------------------" << endl
+		 << "                Search Record                " << endl	
+	     << "---------------------------------------------" << endl
+   
+  		  << "No Records Available..." << endl;
+    system("pause");
+	return;
+	}
+	
+	cout << "---------------------------------------------" << endl
+		 << "                Search Record                " << endl	
+	     << "---------------------------------------------" << endl << endl;
+	     
+	while (current !=NULL ){ //it displays the records
+		if (current->student.fullName == match || current->student.idNumber == match){
+			cout << "Student ID Number: " << current->student.idNumber << endl;
+			cout << "Full Name: "  << current->student.fullName << endl;
+			cout << "Birthday: "  << current->student.birthday << endl;
+			cout << "Address: "  << current->student.address << endl;
+			cout << "Gender: "  << current->student.gender << endl;
+			cout << "Degree Program: "  << current->student.degreeProgram << endl;
+			cout << "Year Level: "  << current->student.yearLevel << endl;
+
+			cout << "---------------------------------------------" << endl;	
+		}
+	current = current->next;
+	}
+	pauseClear();
+}
+
 void deleteRecord();
-void displayRecords();
+
+void displayRecords(Node*& head){
+	
+	 Node* current = head;
+	 
+	if (current == NULL){
+		cout << "=====================================================" << endl
+			 << "                 DISPLAY RECORDS" << endl
+			 << "=====================================================" << endl << endl;
+		
+		cout << "NO RECORDS AVAILABLE..." << endl << endl;
+		
+		system("pause");
+		return;
+	 }
+	 	cout << "=====================================================" << endl
+			 << "                 DISPLAY RECORDS" << endl
+			 << "=====================================================" << endl << endl;
+	 
+	 int i = 1;
+	 while(current != NULL){
+	 	cout << "Student " << i << ": " << endl;
+	 	cout << "ID: " << newNode->student.idNumber << endl;
+		cout << "Full Name: " << newNode->student.fullName << endl;
+		cout << "Birthday: " << newNode->student.birthday << endl;
+		cout << "Address: " << newNode->student.address << endl;
+		cout << "Gender: " << newNode->student.gender << endl;
+		cout << "Degree Program: " << newNode->student.degreeProgram << endl;
+		cout << "Year Level: " << newNode->student.yearLevel << endl << endl;
+		
+		cout << "----------------------------------" << endl;
+		
+		i++;
+		
+		current = current->next;
+	 }
+	
+	pauseClear();
+};
+
+void displaySpecific(){
+	
+}
+
+void loadFromFile(Node*& head, Node*& tmp){
+	ifstream inFile("student_records.txt");
+	
+	if (!inFile.is_open()) {
+        cout << "Error: Unable to open file for reading. Restart the program." << endl;
+        return;
+    }
+    
+    string idNumber, fullName, birthday, address, gender, degreeProgram;
+    int yearLevel;
+	
+	while(inFile >> idNumber >> fullName >> birthday >> address >> gender >> degreeProgram >> yearLevel){
+		
+		Node* newNode = new Node; 		// CREATE A NEW NODE
+		newNode->student.idNumber = idNumber;
+		newNode->student.fullName = fullName;
+		newNode->student.birthday = birthday;
+		newNode->student.address = address;
+		newNode->student.gender = gender;
+		newNode->student.degreeProgram = degreeProgram;
+		newNode->student.yearLevel = yearLevel;
+		
+		if (head == NULL){					// IF HEAD IS NULL OR THERE'S NO NODES YET IN THE LIST THEN...
+			newNode->next = head;			// link to headd
+			head = newNode;					// make head point to newNode
+			tmp = head;						// make tmp point to newNode
+		} else {
+			tmp->next = newNode;			// connect prev node or the node tmp is pointing to toward the new one
+			tmp = tmp->next;				// make tmp point to "previous" node's next link
+			tmp->next = NULL;				// make the new node's next link NULL temporarily
+		}
+	}
+	inFile.close();
+}
 
 void mainMenu(int &menuChoice){
 	do{
@@ -175,39 +323,62 @@ void mainMenu(int &menuChoice){
 		 	<< "6. Exit" << endl << endl;
     	
    		cout << "Please type your selection: ";
-   		cin >> menuChoice;
-	}while(menuChoice < 0 || menuChoice > 6);
-}
+   		
+   		// INPUT VALIDATION
+		do{	
+		while(!(cin>>menuChoice)){  // Repeat until a valid integer input is received.
+			cout << "Enter a valid numeric input: ";
+			cin.clear();
+			cin.ignore(123, '\n');
+		}
+			
+		if (menuChoice > 6 || menuChoice < 1){          //If the input does not fall inside the menu's available options...
+			cout << "Enter a valid numeric input: ";    //prompt the user to enter a valid input.
+		}
 
+		}while(menuChoice > 6 || menuChoice < 1);   // Repeat the loop until a valid input is acquired.
+   		
+   		
+	}while(menuChoice < 1 || menuChoice > 5);
+
+	system("cls");
+}
 
 int main(){
 	int menuChoice;
 	Student studentData;
+	Node* head = NULL;
+	Node* tmp = NULL;
+	string match;
+	
+	loadFromFile(head, tmp);
 	
 	do{
-	    	
+		
     mainMenu(menuChoice);
     
     switch(menuChoice){
     	case 1:
     		studentData.getData();
     		studentData.display();
-    		addNewRecord();
+    		addNewRecord(studentData, head, tmp);
     		break;
     	case 2:
-    	case 3:
+    		cout << "Search for? ";
+    		cin >> match;
+    		
+    		searchRecord(head, match);
+    		break;
+		case 3:
+    		displayRecords(head);
+    		break;
     	case 4:
     	case 5:
     	case 6:
     		break;
 	}
-	}while(true);
+	}while(menuChoice!=6);
 	cout << "Members..." << endl;
 	
     return 0;
-}
-
-
-void addNewRecord(){
-	cout << "Adding new record..." << endl;
 }
