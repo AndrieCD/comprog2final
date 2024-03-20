@@ -129,6 +129,7 @@ class Student {
 		}
 		cin.clear();
 		cin.ignore(123, '\n');
+		
 		cout << "Enter Student's Full Name: ";
 		bool valid;
 		do{
