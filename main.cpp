@@ -374,9 +374,49 @@ void displaySpecific(Node*& head){
 			 
 			break;
 		case 2:
+			cout << "Type the Degree Program of Students to View: ";
+			cin >> program;
 			
+			i = 1;
+			while(current != NULL){
+				if (current->student.degreeProgram == program){
+				 	cout << "Student " << i << ": " << endl;
+				 	cout << "ID: " << current->student.idNumber << endl;
+					cout << "Full Name: " << current->student.fullName << endl;
+					cout << "Birthday: " << current->student.birthday << endl;
+					cout << "Address: " << current->student.address << endl;
+					cout << "Gender: " << current->student.gender << endl;
+					cout << "Degree Program: " << current->student.degreeProgram << endl;
+					cout << "Year Level: " << current->student.yearLevel << endl << endl;
+					
+					cout << "----------------------------------" << endl;
+					i++;
+				}
+				current = current->next;
+			 }
+			 
 			break;
 		case 3:
+			cout << "Type the Year Level of Students to View: ";
+			cin >> yearlvl;
+			
+			i = 1;
+			while(current != NULL){
+				if (current->student.yearLevel == yearlvl){
+				 	cout << "Student " << i << ": " << endl;
+				 	cout << "ID: " << current->student.idNumber << endl;
+					cout << "Full Name: " << current->student.fullName << endl;
+					cout << "Birthday: " << current->student.birthday << endl;
+					cout << "Address: " << current->student.address << endl;
+					cout << "Gender: " << current->student.gender << endl;
+					cout << "Degree Program: " << current->student.degreeProgram << endl;
+					cout << "Year Level: " << current->student.yearLevel << endl << endl;
+					
+					cout << "----------------------------------" << endl;
+					i++;
+				}
+				current = current->next;
+			 }
 			break;
 	}
 	
