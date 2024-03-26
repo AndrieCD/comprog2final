@@ -1,108 +1,3 @@
-
-/*
-FIX INPUT VALIDATION AND INPUT STREAM ERRORS
-
-
-REQUIREMENTS
-   The program must use the following programming concepts:
-a. Functions
-b. Arrays
-c. Structures
-d. Pointers and/or Linked List
-e. File Manipulation
-
-   The program must have a Main Menu wherein the user can select the operation
-he wants. Operations must be:
-a. Add new record
-b. Search record
-c. Delete record
-d. Display records
-
-The program must store the following:
-a. Student ID Number
-b. Full Name
-c. Birthday
-d. Address
-e. Gender
-f. Degree Program
-g. Year Level
-
-----SAMPLE----
-Welcome to Group Pr0gr@mm@z Student Information System
-What do you want to do?
-1. Add New Record
-2. Search Record
-3. Display All Records
-4. Display Specific Record
-5. Delete Record
-6. Exit
-Please type your selection: __
-
-
-----additional functions---
--save data to file on exit
--load data from file on start
--(sorting for all records display???)
-
-
----FORMAT---
-
-Code blocks should have the open curly braces in the same line as the control line, for example:
-
-    if (!n){            <--- open curly brace on the same line as control
-
-    }
-
-    while (true){       <--- open curly brace on the same line as control
-
-    }
--------------------------//////////-------------------------
-
-Code blocks should have indentations for the lines within the block, for example:
-
-    if (x==y){
-        y++;
-        x++;
-        
-        if (x>10){
-            x--;
-            y++;
-        }
-    }
--------------------------//////////-------------------------
-
-Use camel case when initializing variables or functions, for example:
-
-    int myNumber;						// lowerCase then upperCase for first letters
-    char myCharacterHere;				//		helloWorld  
-
-    void thisIsMyFunction();
--------------------------//////////-------------------------
-
-Utilize spaces for readability and visibility as much as possible, for exampe:
-
-	while (true)
-         ^ space
-	     
-	if (x == y)
-	     ^  ^ space
-	     
-	for (int hi = 0; hi < hello; hi++)
-                    ^ space     ^ space
--------------------------//////////-------------------------
-
-Avoid using \n or new line control character, instead use endl for visibility and consistency.
-
-	cout << "Hello World" << endl;
-	cout << "Two new lines!" << endl << endl;
-	
--------------------------//////////-------------------------
-
-// SAVE TO FILE EVERY RECORD ADDED (???)
-// LOAD FROM FILE ON PROGRAM START
-
-*/
-
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -116,64 +11,187 @@ using namespace std;
 // STUDENT CLASS + MEMBERS AND METHODS
 class Student {
 	public:
-			char idNumber[9];
-			char fullName[30];
-			string birthday;
+			string idNumber;
+			char fullName[3][20];
+			char birthday[3][20];
 			string address;
-			string gender;
+			char gender;
 			string degreeProgram;
 			string yearLevel;
-			
+						
 	void getData(){
+		string input = "";
 			
 		cout << "Enter Student ID Number: ";
-		for(int i = 0; i < 9; i++){
-			cin >> idNumber[i];
-		}
-		cin.clear();
-		cin.ignore(123, '\n');
 		
-		cout << "Enter Student's Full Name: ";
-		bool valid;
-		do{
+		while(true){
+			cin >> input;
 			
-			cin.getline(fullName, 50);
+			bool valid = true;
 			
-			valid = true;
-			for(int i = 0; i < strlen(fullName) && valid; i++){
-				if (!(isalpha(fullName[i]) || isspace(fullName[i]))){
-				cout << "MALI BOBO";
-				valid = false;
-				cin.clear();
-				}else{
-					valid = true;
+			for(int i = 0; i < input.size(); ++i){
+				if(!isdigit(input[i])){
+					valid = false;
+					break;
 				}
 			}
-		}while (!valid);
-		string month, day, year;
-		cout << "Enter Student's Birthday:(Month, Day, Year) ";
-		cin >> month >> day >> year;
-		birthday = month + " " + day + " " + year;
-		cin.clear();
-		cin.ignore(123, '\n');
+			
+			if(valid && input.size() == 9){
+				idNumber = input;
+				cin.clear();
+				cin.ignore(123, '\n');
+				break;
+			} else {
+				cout << "Invalid input. Please enter a 9-digit numeric input: ";
+				cin.clear();
+				cin.ignore(123, '\n');
+			}
+		}
+		
+		char nPrmpt[3][20] = {"Given Name", "Middle Name", "Surname"};
+		
+		for (int cntr = 0; cntr < 3; cntr++){
+			cout << "Enter Student's " << nPrmpt[cntr] << ": ";
+			while(true){
+				cin.getline(fullName[cntr], 20);
+			
+				bool valid = true;
+			
+				for(int i = 0; i < strlen(fullName[cntr]); ++i){
+					if(!(isalpha(fullName[cntr][i]) || isspace(fullName[cntr][i]))){
+						valid = false;
+						break;
+					}
+				}
+			
+				if(valid){
+					cin.clear();
+					break;
+				} else {
+					cout << "Invalid input. Please enter a valid name input: ";
+					cin.clear();
+				}
+			}
+			
+		}		
+				
+		char bPrmpt[3][20] = {"Birth Month", "Birth Day", "Birth Year"};
+		
+		for (int cntr = 0; cntr < 3; cntr++){
+		cout << "Enter Student's " << bPrmpt[cntr] << ": ";
+			while(true){
+				cin.getline(birthday[cntr], 20);
+			
+				bool valid = true;
+			
+				for(int i = 0; i < strlen(birthday[cntr]); ++i){
+					if(!(isalnum(birthday[cntr][i]) || isspace(birthday[cntr][i]))){
+						valid = false;
+						break;
+					}
+				}
+			
+				if(valid){
+						cin.clear();
+					break;
+				} else {
+					cout << "Invalid input. Please enter a birthday name input: ";
+					cin.clear();
+				}
+			}
+			
+		}		
 	
-		cout << "Enter Student's Address: ";
-		getline (cin, address);
 	
-		cout << "Enter Student's Gender: ";
-		cin >> gender;
+		cout << "Enter Student's Address (City Name): ";
+		while(true){
+			cin >> input;
+			
+			bool valid = true;
+			
+			for(int i = 0; i < input.size(); ++i){
+				if(!isalpha(input[i])){
+					valid = false;
+					break;
+				}
+			}
+			
+			if(valid){
+				address = input;
+				cin.clear();
+				break;
+			} else {
+				cout << "Invalid input. Please enter a valid city name input: ";
+				cin.clear();
+			}
+		}
 	
-		cout << "Enter Student's Degree Program: ";
-		cin >> degreeProgram;
+		cout << "Enter Student's Gender (M/F): ";
+		while(true){
+			cin >> gender;
+			
+			bool valid = true;
+			
+			if(!(gender == 'M' || gender == 'F')){
+				valid = false;
+			}
+			
+			if(valid){
+				cin.clear();
+				break;
+			} else {
+				cout << "Invalid input. Please enter a gender input: ";
+				cin.clear();
+			}
+		}
+	
+		cout << "Enter Student's Degree Program (BSIT/BSCE/BSCoE/BSCS/BSMMA): ";
+		while(true){
+			cin >> input;
+			
+			bool valid = true;
+			
+			for(int i = 0; i < input.size(); ++i){
+				if(!(input == "BSIT" || input == "BSCE" || input == "BSCoe" || input == "BSCS" || input == "BSMMA")){
+					valid = false;
+					break;
+				}
+			}
+			
+			if(valid){
+				degreeProgram = input;
+				cin.clear();
+				break;
+			} else {
+				cout << "Invalid input. Please enter a valid degree program input: ";
+				cin.clear();
+			}
+		}
 	
 		cout << "Enter Student's Year Level:(1st, 2nd, 3rd, or 4th) ";
-		cin >> yearLevel;	
+		while(true){
+			cin >> input;
+			
+			bool valid = true;
+			
+			if(!(input == "1st" || input == "2nd" || input == "3rd" || input == "4th")){
+				valid = false;
+			}
+			
+			if(valid){
+				yearLevel = input;
+				cin.clear();
+				break;
+			} else {
+				cout << "Invalid input. Please enter a year level input: ";
+				cin.clear();
+			}
+		}
+		
 	}
 
 	void display(){
-		cout << idNumber << endl
-			 << birthday << endl
-			 << degreeProgram;
+		cout << idNumber << endl << fullName[0] << fullName[1] << fullName[2] << endl << birthday[0] << birthday[1] << birthday[2] << endl << address << endl << gender << endl << degreeProgram << endl << yearLevel;
 	}
 		
 		private:
@@ -214,12 +232,17 @@ void addNewRecord(const Student& student, Node*& head, Node*& tmp){ // ADD NEW R
 	}
 	
 	outFile << student.idNumber << endl
-			<< student.fullName << endl
-			<< student.birthday << endl
+			<< student.fullName[0] << endl
+			<< student.fullName[1] << endl
+			<< student.fullName[2] << endl
+			<< student.birthday[0] << endl
+			<< student.birthday[1] << endl
+			<< student.birthday[2] << endl
 			<< student.address << endl
 			<< student.gender << endl
 			<< student.degreeProgram << endl
-			<< student.yearLevel << endl << endl;
+			<< student.yearLevel << endl 
+			<< endl;
 			
 	outFile.close();
 	
@@ -231,13 +254,14 @@ void searchRecord(Node* head, string match){
 	Node* current = head;
 	if (current== NULL){ // it displays a message "No Records Available" if the list is empty
 
-	cout << "---------------------------------------------" << endl
-		 << "                Search Record                " << endl	
-	     << "---------------------------------------------" << endl
-   
-  		  << "No Records Available..." << endl;
-    system("pause");
-	return;
+		cout << "---------------------------------------------" << endl
+			 << "                Search Record                " << endl	
+		     << "---------------------------------------------" << endl
+	   
+	  		 << "No Records Available..." << endl;
+	   
+	    system("pause");
+		return;
 	}
 	
 	cout << "---------------------------------------------" << endl
@@ -245,10 +269,10 @@ void searchRecord(Node* head, string match){
 	     << "---------------------------------------------" << endl << endl;
 	     
 	while (current !=NULL ){ //it displays the records
-		if (current->student.fullName == match || current->student.idNumber == match){
+		if (current->student.fullName[2] == match || current->student.idNumber == match){
 			cout << "Student ID Number: " << current->student.idNumber << endl;
-			cout << "Full Name: "  << current->student.fullName << endl;
-			cout << "Birthday: "  << current->student.birthday << endl;
+			cout << "Full Name: "  << current->student.fullName[0] << " " << current->student.fullName[1] << " " << current->student.fullName[2] << endl;
+			cout << "Birthday: "  << current->student.birthday[0] << " " << current->student.birthday[1] << " " << current->student.birthday[2] << endl;
 			cout << "Address: "  << current->student.address << endl;
 			cout << "Gender: "  << current->student.gender << endl;
 			cout << "Degree Program: "  << current->student.degreeProgram << endl;
@@ -256,7 +280,7 @@ void searchRecord(Node* head, string match){
 
 			cout << "---------------------------------------------" << endl;	
 		}
-	current = current->next;
+		current = current->next;
 	}
 	pauseClear();
 }
@@ -276,8 +300,9 @@ void deleteRecord(Node*& head, string match){
 	}
 	
 	cout << "=====================================================" << endl
-			 << "                Delete Record" << endl
-			 << "=====================================================" << endl << endl;
+		 << "                   Delete Record                     " << endl
+		 << "=====================================================" << endl << endl;
+		 
 		while (current != NULL){
 			if (current->student.idNumber == match){
 					prev->next = current->next;
@@ -285,7 +310,6 @@ void deleteRecord(Node*& head, string match){
 			}
 			prev = current;
 			current = current->next;
-			
 		}
 		
 		ofstream outFile("student_records.txt");
@@ -294,16 +318,23 @@ void deleteRecord(Node*& head, string match){
 		
 		while (current != NULL){
 			outFile << current->student.idNumber << endl
-					<< current->student.fullName << endl
-					<< current->student.birthday << endl
-					<< current->student.address << endl
-					<< current->student.gender << endl
-					<< current->student.degreeProgram << endl
-					<< current->student.yearLevel << endl << endl;
+				<< current->student.fullName[0] << endl
+				<< current->student.fullName[1] << endl
+				<< current->student.fullName[2] << endl
+				<< current->student.birthday[0] << endl
+				<< current->student.birthday[1] << endl
+				<< current->student.birthday[2] << endl
+				<< current->student.address << endl
+				<< current->student.gender << endl
+				<< current->student.degreeProgram << endl
+				<< current->student.yearLevel << endl 
+				<< endl;
 			
 			current = current->next;
 	}
+	
 	outFile.close();
+	
 	cout << "Records Updated" << endl;
 	
 	pauseClear();
@@ -315,7 +346,7 @@ void displayRecords(Node*& head){
 	 
 	if (current == NULL){
 		cout << "=====================================================" << endl
-			 << "                 DISPLAY RECORDS" << endl
+			 << "                   DISPLAY RECORDS                   " << endl
 			 << "=====================================================" << endl << endl;
 		
 		cout << "NO RECORDS AVAILABLE..." << endl << endl;
@@ -324,23 +355,15 @@ void displayRecords(Node*& head){
 		return;
 	 }
 	 	cout << "=====================================================" << endl
-			 << "                 DISPLAY RECORDS" << endl
+			 << "                   DISPLAY RECORDS                   " << endl
 			 << "=====================================================" << endl << endl;
 	 
 	 int i = 1;
 	 while(current != NULL){
 	 	cout << "Student " << i << ": " << endl;
-	 	cout << "ID: ";
-	 	for (int j = 0; j<9; j++){
-	 		cout << current->student.idNumber[j];
-		 }
-		 
-		cout << endl << "Full Name: ";
-		for (int j = 0; j < strlen(current->student.fullName); j++){
-	 		cout << current->student.fullName[j];
-		 }
-		 
-		cout << endl << "Birthday: " << current->student.birthday << endl;
+	 	cout << "ID: " << current->student.idNumber << endl;
+		cout << "Full Name:" << current->student.fullName[0] << " " << current->student.fullName[1] << " " << current->student.fullName[2] << endl;
+		cout << "Birthday: " << current->student.birthday[0] << " " << current->student.birthday[1] << " " << current->student.birthday[2] << endl;
 		cout << "Address: " << current->student.address << endl;
 		cout << "Gender: " << current->student.gender << endl;
 		cout << "Degree Program: " << current->student.degreeProgram << endl;
@@ -358,7 +381,7 @@ void displayRecords(Node*& head){
 
 void displaySpecific(Node*& head){
 	Node* current = head;
-	string gender;
+	char gender;
 	string program;
 	string yearlvl;
 	int i = 1;
@@ -388,18 +411,31 @@ void displaySpecific(Node*& head){
 	switch(option){
 		case 1:
 			cout << "Type the Gender of Students to View: ";
-			cin >> gender;
+			while(true){
+				cin >> gender;
+				
+				bool valid = true;
+				
+				if(!(gender == 'M' || gender == 'F')){
+					valid = false;
+				}
+				
+				if(valid){
+					cin.clear();
+					break;
+				} else {
+					cout << "Invalid input. Please enter a gender input: ";
+					cin.clear();
+				}
+			}
 			
 			i = 1;
 			while(current != NULL){
 				if (current->student.gender == gender){
 				 	cout << "Student " << i << ": " << endl;
-				 	cout << "ID: ";
-		 			for (int j = 0; j<9; j++){
-	 					cout << current->student.idNumber[j];	
-			 		}
-					cout << endl << "Full Name: " << current->student.fullName << endl;
-					cout << "Birthday: " << current->student.birthday << endl;
+				 	cout << "ID: " << current->student.idNumber << endl;
+					cout << "Full Name:" << current->student.fullName[0] << " " << current->student.fullName[1] << " " << current->student.fullName[2] << endl;
+					cout << "Birthday: " << current->student.birthday[0] << " " << current->student.birthday[1] << " " << current->student.birthday[2] << endl;
 					cout << "Address: " << current->student.address << endl;
 					cout << "Gender: " << current->student.gender << endl;
 					cout << "Degree Program: " << current->student.degreeProgram << endl;
@@ -413,16 +449,37 @@ void displaySpecific(Node*& head){
 			 
 			break;
 		case 2:
-			cout << "Type the Degree Program of Students to View: ";
+			cout << "Type the Degree Program of Students to View (BSIT/BSCE/BSCoE/BSCS/BSMMA)): ";
 			cin >> program;
+			
+			while(true){
+				cin >> program;
+				
+				bool valid = true;
+				
+				for(int i = 0; i < program.size(); ++i){
+					if(!(program == "BSIT" || program == "BSCE" || program == "BSCoe" || program == "BSCS" || program == "BSMMA")){
+						valid = false;
+						break;
+					}
+				}
+				
+				if(valid){
+					cin.clear();
+					break;
+				} else {
+					cout << "Invalid input. Please enter a valid degree program input: ";
+					cin.clear();
+				}
+			}
 			
 			i = 1;
 			while(current != NULL){
 				if (current->student.degreeProgram == program){
 				 	cout << "Student " << i << ": " << endl;
 				 	cout << "ID: " << current->student.idNumber << endl;
-					cout << "Full Name: " << current->student.fullName << endl;
-					cout << "Birthday: " << current->student.birthday << endl;
+					cout << "Full Name:" << current->student.fullName[0] << " " << current->student.fullName[1] << " " << current->student.fullName[2] << endl;
+					cout << "Birthday: " << current->student.birthday[0] << " " << current->student.birthday[1] << " " << current->student.birthday[2] << endl;
 					cout << "Address: " << current->student.address << endl;
 					cout << "Gender: " << current->student.gender << endl;
 					cout << "Degree Program: " << current->student.degreeProgram << endl;
@@ -437,15 +494,31 @@ void displaySpecific(Node*& head){
 			break;
 		case 3:
 			cout << "Type the Year Level of Students to View: ";
-			cin >> yearlvl;
+			while(true){
+				cin >> yearlvl;
+				
+				bool valid = true;
+				
+				if(!(yearlvl == "1st" || yearlvl == "2nd" || yearlvl == "3rd" || yearlvl == "4th")){
+					valid = false;
+				}
+				
+				if(valid){
+					cin.clear();
+					break;
+				} else {
+					cout << "Invalid input. Please enter a year level input: ";
+					cin.clear();
+				}
+			}
 			
 			i = 1;
 			while(current != NULL){
 				if (current->student.yearLevel == yearlvl){
 				 	cout << "Student " << i << ": " << endl;
 				 	cout << "ID: " << current->student.idNumber << endl;
-					cout << "Full Name: " << current->student.fullName << endl;
-					cout << "Birthday: " << current->student.birthday << endl;
+					cout << "Full Name:" << current->student.fullName[0] << " " << current->student.fullName[1] << " " << current->student.fullName[2] << endl;
+					cout << "Birthday: " << current->student.birthday[0] << " " << current->student.birthday[1] << " " << current->student.birthday[2] << endl;
 					cout << "Address: " << current->student.address << endl;
 					cout << "Gender: " << current->student.gender << endl;
 					cout << "Degree Program: " << current->student.degreeProgram << endl;
@@ -470,18 +543,33 @@ void loadFromFile(Node*& head, Node*& tmp){
         return;
     }
     
-    string idNumber, fullName, birthday, address, gender, degreeProgram, yearLevel;
+    string idNumber;
+    
+	string givenName, middleName, surName;
+	string month, day, year;
 	
-	while(inFile >> idNumber >> fullName >> birthday >> address >> gender >> degreeProgram >> yearLevel){
+	string address;
+	char gender;
+	string degreeProgram;
+	string yearLevel;
+	
+	while(inFile >> idNumber >> givenName >> middleName >> surName >> month >> day >> year >> address >> gender >> degreeProgram >> yearLevel){
 		
 		Node* newNode = new Node; 		// CREATE A NEW NODE
-		for(int i = 0; i < 9; i++){
-			newNode->student.idNumber[i] = idNumber[i];
+		newNode->student.idNumber = idNumber;
+		
+		for(int i = 0; i < givenName.size(); i++){
+			newNode->student.fullName[0][i] = givenName[i];
 		}
-		for(int i = 0; i < fullName.size();i++){
-			newNode->student.fullName[i] = fullName[i];
-		}
-		newNode->student.birthday = birthday;
+		
+		newNode->student.fullName[1] = fullName[1];
+		newNode->student.fullName[2] = fullName[2];
+		
+		newNode->student.birthday[0] = birthday[0];
+		newNode->student.birthday[1] = birthday[1];
+		newNode->student.birthday[2] = birthday[2];
+		
+		
 		newNode->student.address = address;
 		newNode->student.gender = gender;
 		newNode->student.degreeProgram = degreeProgram;
@@ -503,10 +591,10 @@ void loadFromFile(Node*& head, Node*& tmp){
 void mainMenu(int &menuChoice){
 	do{
 		cout << "---------------------------------------------------------------------------" << endl
-			 << "           Welcome to <GROUP NAME HERE> STUDENT INFORMATION SYSTEM         " << endl
+			 << "             WELCOME TO Forda Grades STUDENT INFORMATION SYSTEM            " << endl
 			 << "---------------------------------------------------------------------------" << endl << endl
 		 
-			 << "What do you want to do?" << endl
+			<< "What do you want to do?" << endl
 		 	<< "1. Add New Record" << endl
 		 	<< "2. Search Record" << endl
 		 	<< "3. Display All Records" << endl
@@ -558,9 +646,10 @@ int main(){
     		addNewRecord(studentData, head, tmp);
     		break;
     	case 2:
-    		cout << "Search for? ";
-    		cin >> match;
+    		cout << "Search by surname or ID number: ";
     		
+			cin >> match;
+			    		
     		searchRecord(head, match);
     		break;
 		case 3:
