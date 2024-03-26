@@ -747,6 +747,8 @@ int main(){
 	    	case 2:
 	    		cout << "Search by surname or ID number: ";
 	    		
+	    		cin.clear();
+	    		cin.ignore(123, '\n');
 				getline(cin, match);
 				    		
 	    		searchRecord(head, match);
