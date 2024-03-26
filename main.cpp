@@ -1,3 +1,52 @@
+/*
+202311439
+Andrie
+Conda
+Detera
+June
+19
+2004
+Marikina City
+M
+BSIT
+1st
+202311438
+Angelito Jose
+Castillano
+Regero
+May
+27
+2004
+Quezon City
+M
+BSIT
+1st
+202311437
+Leona Belle
+Castro
+Alcantara
+January
+1
+2004
+Quezon City
+F
+BSIT
+1st
+202311436
+Ric Josef
+Estrada
+De Gracia
+April
+22
+2004
+Manila City
+M
+BSCE
+2nd
+
+*/
+
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -83,13 +132,22 @@ class Student {
 				cin.getline(birthday[cntr], 20);
 			
 				bool valid = true;
-			
-				for(int i = 0; i < strlen(birthday[cntr]); ++i){
-					if(!(isalnum(birthday[cntr][i]) || isspace(birthday[cntr][i]))){
-						valid = false;
-						break;
+				if(cntr == 0){
+					for(int i = 0; i < strlen(birthday[cntr]); ++i){
+						if(!(isalpha(birthday[cntr][i]))){
+							valid = false;
+							break;
+						}
+					}
+				}else {
+					for(int i = 0; i < strlen(birthday[cntr]); ++i){
+						if(!(isdigit(birthday[cntr][i]))){
+							valid = false;
+							break;
+						}
 					}
 				}
+	
 			
 				if(valid){
 						cin.clear();
@@ -99,18 +157,18 @@ class Student {
 					cin.clear();
 				}
 			}
-			
-		}		
+		}
+				
 	
 	
 		cout << "Enter Student's Address (City Name): ";
 		while(true){
-			cin >> input;
+			getline(cin, input);
 			
 			bool valid = true;
 			
 			for(int i = 0; i < input.size(); ++i){
-				if(!isalpha(input[i])){
+				if(!(isalpha(input[i])|| isspace(input[i]))){
 					valid = false;
 					break;
 				}
@@ -241,8 +299,7 @@ void addNewRecord(const Student& student, Node*& head, Node*& tmp){ // ADD NEW R
 			<< student.address << endl
 			<< student.gender << endl
 			<< student.degreeProgram << endl
-			<< student.yearLevel << endl 
-			<< endl;
+			<< student.yearLevel << endl;
 			
 	outFile.close();
 	
@@ -305,8 +362,13 @@ void deleteRecord(Node*& head, string match){
 		 
 		while (current != NULL){
 			if (current->student.idNumber == match){
+				if (current != head){
 					prev->next = current->next;
 					delete current;
+				} else {
+					head = current->next;
+					delete current;
+				}
 			}
 			prev = current;
 			current = current->next;
@@ -327,8 +389,7 @@ void deleteRecord(Node*& head, string match){
 				<< current->student.address << endl
 				<< current->student.gender << endl
 				<< current->student.degreeProgram << endl
-				<< current->student.yearLevel << endl 
-				<< endl;
+				<< current->student.yearLevel << endl;
 			
 			current = current->next;
 	}
@@ -351,7 +412,7 @@ void displayRecords(Node*& head){
 		
 		cout << "NO RECORDS AVAILABLE..." << endl << endl;
 		
-		system("pause");
+		pauseClear();
 		return;
 	 }
 	 	cout << "=====================================================" << endl
@@ -362,7 +423,7 @@ void displayRecords(Node*& head){
 	 while(current != NULL){
 	 	cout << "Student " << i << ": " << endl;
 	 	cout << "ID: " << current->student.idNumber << endl;
-		cout << "Full Name:" << current->student.fullName[0] << " " << current->student.fullName[1] << " " << current->student.fullName[2] << endl;
+		cout << "Full Name: " << current->student.fullName[0] << " " << current->student.fullName[1] << " " << current->student.fullName[2] << endl;
 		cout << "Birthday: " << current->student.birthday[0] << " " << current->student.birthday[1] << " " << current->student.birthday[2] << endl;
 		cout << "Address: " << current->student.address << endl;
 		cout << "Gender: " << current->student.gender << endl;
@@ -450,7 +511,6 @@ void displaySpecific(Node*& head){
 			break;
 		case 2:
 			cout << "Type the Degree Program of Students to View (BSIT/BSCE/BSCoE/BSCS/BSMMA)): ";
-			cin >> program;
 			
 			while(true){
 				cin >> program;
@@ -542,49 +602,88 @@ void loadFromFile(Node*& head, Node*& tmp){
         cout << "Error: Unable to open file for reading. Restart the program." << endl;
         return;
     }
-    
-    string idNumber;
-    
-	string givenName, middleName, surName;
-	string month, day, year;
 	
-	string address;
-	char gender;
-	string degreeProgram;
-	string yearLevel;
-	
-	while(inFile >> idNumber >> givenName >> middleName >> surName >> month >> day >> year >> address >> gender >> degreeProgram >> yearLevel){
+	string line;
+	Node* newNode = new Node;
+	int counter = 1;
+	while(!inFile.eof()){
 		
-		Node* newNode = new Node; 		// CREATE A NEW NODE
-		newNode->student.idNumber = idNumber;
+		getline(inFile, line);
 		
-		for(int i = 0; i < givenName.size(); i++){
-			newNode->student.fullName[0][i] = givenName[i];
-		}
-		
-		newNode->student.fullName[1] = fullName[1];
-		newNode->student.fullName[2] = fullName[2];
-		
-		newNode->student.birthday[0] = birthday[0];
-		newNode->student.birthday[1] = birthday[1];
-		newNode->student.birthday[2] = birthday[2];
-		
-		
-		newNode->student.address = address;
-		newNode->student.gender = gender;
-		newNode->student.degreeProgram = degreeProgram;
-		newNode->student.yearLevel = yearLevel;
-		
-		if (head == NULL){					// IF HEAD IS NULL OR THERE'S NO NODES YET IN THE LIST THEN...
-			newNode->next = head;			// link to headd
-			head = newNode;					// make head point to newNode
-			tmp = head;						// make tmp point to newNode
-		} else {
-			tmp->next = newNode;			// connect prev node or the node tmp is pointing to toward the new one
-			tmp = tmp->next;				// make tmp point to "previous" node's next link
-			tmp->next = NULL;				// make the new node's next link NULL temporarily
+		switch(counter){
+			case 1:
+				newNode->student.idNumber = line;
+				counter++;
+				break;
+			case 2:
+				for(int i = 0; i < line.size(); i++){
+					newNode->student.fullName[0][i] = line[i];
+				}
+				counter++;
+				break;
+			case 3:
+				for(int i = 0; i < line.size(); i++){
+					newNode->student.fullName[1][i] = line[i];
+				}
+				counter++;
+				break;
+			case 4:
+				for(int i = 0; i < line.size(); i++){
+					newNode->student.fullName[2][i] = line[i];
+				}
+				counter++;
+				break;
+			case 5:
+				for(int i = 0; i < line.size(); i++){
+					newNode->student.birthday[0][i] = line[i];
+				}
+				counter++;
+				break;
+			case 6:
+				for(int i = 0; i < line.size(); i++){
+					newNode->student.birthday[1][i] = line[i];
+				}
+				counter++;
+				break;
+			case 7:
+				for(int i = 0; i < line.size(); i++){
+					newNode->student.birthday[2][i] = line[i];
+				}
+				counter++;
+				break;
+			case 8:
+				newNode->student.address = line;
+				counter++;
+				break;
+			case 9:
+				for(int i = 0; i < line.size(); i++){
+					newNode->student.gender = line[i];
+				}
+				counter++;
+				break;
+			case 10:
+				newNode->student.degreeProgram = line;
+				counter++;
+				break;
+			case 11:
+
+				newNode->student.yearLevel = line;
+				
+				if (head == NULL){					// IF HEAD IS NULL OR THERE'S NO NODES YET IN THE LIST THEN...
+					newNode->next = head;			// link to headd
+					head = newNode;					// make head point to newNode
+					tmp = head;						// make tmp point to newNode
+				} else {
+					tmp->next = newNode;			// connect prev node or the node tmp is pointing to toward the new one
+					tmp = tmp->next;				// make tmp point to "previous" node's next link
+					tmp->next = NULL;				// make the new node's next link NULL temporarily
+				}
+				newNode = new Node;
+				counter = 1;
+				break;
 		}
 	}
+	
 	inFile.close();
 }
 
@@ -637,37 +736,41 @@ int main(){
 	
 	do{
 		
-    mainMenu(menuChoice);
-    
-    switch(menuChoice){
-    	case 1:
-    		studentData.getData();
-    		studentData.display();
-    		addNewRecord(studentData, head, tmp);
-    		break;
-    	case 2:
-    		cout << "Search by surname or ID number: ";
-    		
-			cin >> match;
-			    		
-    		searchRecord(head, match);
-    		break;
-		case 3:
-    		displayRecords(head);
-    		break;
-    	case 4:
-    		displaySpecific(head);
-    		break;
-    	case 5:
-    		cout << "Enter the ID Number of the Student: ";
-    		cin >> match;
-    		deleteRecord(head, match);
-    		break;
-    	case 6:
-    		break;
-	}
+	    mainMenu(menuChoice);
+	    
+	    switch(menuChoice){
+	    	case 1:
+	    		studentData.getData();
+	    		studentData.display();
+	    		addNewRecord(studentData, head, tmp);
+	    		break;
+	    	case 2:
+	    		cout << "Search by surname or ID number: ";
+	    		
+				getline(cin, match);
+				    		
+	    		searchRecord(head, match);
+	    		break;
+			case 3:
+	    		displayRecords(head);
+	    		break;
+	    	case 4:
+	    		displaySpecific(head);
+	    		break;
+	    	case 5:
+	    		cout << "Enter the ID Number of the Student: ";
+	    		cin >> match;
+	    		deleteRecord(head, match);
+	    		break;
+	    	case 6:
+	    		break;
+		}
 	}while(menuChoice!=6);
-	cout << "Members..." << endl;
+	
+	cout << "Members: " << endl
+		 << "        Ric Josef De Gracia" << endl 
+		 << "        Andrie Detera      " << endl
+		 << "        Angelito Jose Regero" << endl;
 	
     return 0;
 }
