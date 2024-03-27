@@ -153,7 +153,7 @@ class Student {
 						cin.clear();
 					break;
 				} else {
-					cout << "Invalid input. Please enter a birthday name input: ";
+					cout << "Invalid input. Please enter a birthday input: ";
 					cin.clear();
 				}
 			}
@@ -310,24 +310,16 @@ void addNewRecord(const Student& student, Node*& head, Node*& tmp){ // ADD NEW R
 void searchRecord(Node* head, string match){
 	Node* current = head;
 	if (current== NULL){ // it displays a message "No Records Available" if the list is empty
-
-		cout << "---------------------------------------------" << endl
-			 << "                Search Record                " << endl	
-		     << "---------------------------------------------" << endl
 	   
-	  		 << "No Records Available..." << endl;
+	  	cout << "No Records Available..." << endl;
 	   
 	    system("pause");
 		return;
 	}
-	
-	cout << "---------------------------------------------" << endl
-		 << "                Search Record                " << endl	
-	     << "---------------------------------------------" << endl << endl;
 	     
 	while (current !=NULL ){ //it displays the records
 		if (current->student.fullName[2] == match || current->student.idNumber == match){
-			cout << "Student ID Number: " << current->student.idNumber << endl;
+			cout << "\nStudent ID Number: " << current->student.idNumber << endl;
 			cout << "Full Name: "  << current->student.fullName[0] << " " << current->student.fullName[1] << " " << current->student.fullName[2] << endl;
 			cout << "Birthday: "  << current->student.birthday[0] << " " << current->student.birthday[1] << " " << current->student.birthday[2] << endl;
 			cout << "Address: "  << current->student.address << endl;
@@ -347,18 +339,12 @@ void deleteRecord(Node*& head, string match){
 	Node* prev = NULL;
 	
 	if (current == NULL){
-		cout << "=====================================================" << endl
-			 << "                Delete Record" << endl
-			 << "=====================================================" << endl << endl;
 		
 		cout << "NO RECORDS AVAILABLE..." << endl << endl;
 		system("pause");
 		return;
 	}
 	
-	cout << "=====================================================" << endl
-		 << "                   Delete Record                     " << endl
-		 << "=====================================================" << endl << endl;
 		 
 		while (current != NULL){
 			if (current->student.idNumber == match){
@@ -396,7 +382,8 @@ void deleteRecord(Node*& head, string match){
 	
 	outFile.close();
 	
-	cout << "Records Updated" << endl;
+	cout << "Records Updated. " << endl
+		 << "Record for " << match << " has been deleted." << endl;
 	
 	pauseClear();
 }
@@ -448,24 +435,18 @@ void displaySpecific(Node*& head){
 	int i = 1;
 	 
 	if (current == NULL){
-		cout << "=====================================================" << endl
-			 << "                 DISPLAY RECORDS" << endl
-			 << "=====================================================" << endl << endl;
-		
 		cout << "NO RECORDS AVAILABLE..." << endl << endl;
 		
 		system("pause");
 		return;
 	 }
- 	cout << "=====================================================" << endl
-			 << "                 DISPLAY RECORDS" << endl
-			 << "=====================================================" << endl << endl;
 	
 	int option; 
 	cout << "Display Specific Records By: " << endl
 		 << "1. Gender" << endl
 		 << "2. Degree Program" << endl
-		 << "3. Year Level" << endl;
+		 << "3. Year Level" << endl << endl
+		 << "Enter your choice: ";
 		 
 	cin >> option;
 	
@@ -493,7 +474,7 @@ void displaySpecific(Node*& head){
 			i = 1;
 			while(current != NULL){
 				if (current->student.gender == gender){
-				 	cout << "Student " << i << ": " << endl;
+				 	cout << "\nStudent " << i << ": " << endl;
 				 	cout << "ID: " << current->student.idNumber << endl;
 					cout << "Full Name:" << current->student.fullName[0] << " " << current->student.fullName[1] << " " << current->student.fullName[2] << endl;
 					cout << "Birthday: " << current->student.birthday[0] << " " << current->student.birthday[1] << " " << current->student.birthday[2] << endl;
@@ -536,7 +517,7 @@ void displaySpecific(Node*& head){
 			i = 1;
 			while(current != NULL){
 				if (current->student.degreeProgram == program){
-				 	cout << "Student " << i << ": " << endl;
+				 	cout << "\nStudent " << i << ": " << endl;
 				 	cout << "ID: " << current->student.idNumber << endl;
 					cout << "Full Name:" << current->student.fullName[0] << " " << current->student.fullName[1] << " " << current->student.fullName[2] << endl;
 					cout << "Birthday: " << current->student.birthday[0] << " " << current->student.birthday[1] << " " << current->student.birthday[2] << endl;
@@ -575,7 +556,7 @@ void displaySpecific(Node*& head){
 			i = 1;
 			while(current != NULL){
 				if (current->student.yearLevel == yearlvl){
-				 	cout << "Student " << i << ": " << endl;
+				 	cout << "\nStudent " << i << ": " << endl;
 				 	cout << "ID: " << current->student.idNumber << endl;
 					cout << "Full Name:" << current->student.fullName[0] << " " << current->student.fullName[1] << " " << current->student.fullName[2] << endl;
 					cout << "Birthday: " << current->student.birthday[0] << " " << current->student.birthday[1] << " " << current->student.birthday[2] << endl;
@@ -741,10 +722,13 @@ int main(){
 	    switch(menuChoice){
 	    	case 1:
 	    		studentData.getData();
-	    		studentData.display();
 	    		addNewRecord(studentData, head, tmp);
 	    		break;
 	    	case 2:
+	    		cout << "---------------------------------------------" << endl
+					 << "                Search Record                " << endl	
+				     << "---------------------------------------------" << endl << endl;
+		     
 	    		cout << "Search by surname or ID number: ";
 	    		
 	    		cin.clear();
@@ -757,9 +741,17 @@ int main(){
 	    		displayRecords(head);
 	    		break;
 	    	case 4:
+	    		cout << "=====================================================" << endl
+					 << "               DISPLAY SPECIFIC RECORDS              " << endl
+					 << "=====================================================" << endl << endl;
+			 
 	    		displaySpecific(head);
 	    		break;
 	    	case 5:
+	    		cout << "=====================================================" << endl
+					 << "                Delete Record" << endl
+					 << "=====================================================" << endl << endl;
+					 
 	    		cout << "Enter the ID Number of the Student: ";
 	    		cin >> match;
 	    		deleteRecord(head, match);
